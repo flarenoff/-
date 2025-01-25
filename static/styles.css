@@ -1,0 +1,281 @@
+.advertisment{
+    width: 50px;
+}
+
+.feedback{
+    width: 50px;
+    height: 50px;
+}
+
+.fon {
+    transition: background-color 0.5s;
+}
+
+.rainbow {
+    animation: rainbow 4s infinite;
+}
+
+@keyframes rainbow {
+    0% {
+        background-color: red;
+    }
+
+    14% {
+        background-color: orange;
+    }
+
+    28% {
+        background-color: yellow;
+    }
+
+    42% {
+        background-color: green;
+    }
+
+    57% {
+        background-color: blue;
+    }
+
+    71% {
+        background-color: indigo;
+    }
+
+    85% {
+        background-color: violet;
+    }
+
+    100% {
+        background-color: red;
+    }
+}
+
+.logo {
+    width: 32px;
+}
+
+video {
+    width: 40%;
+}
+
+.video-list {
+    transition: background-color ease 0.1s;
+    display: flex; /* Используем flexbox */
+    flex-wrap: wrap; /* Позволяем перенос строк */
+    justify-content: left; /* Распределяем элементы по горизонтали */
+    padding: 20px; /* Внутренние отступы */
+}
+
+    .video-list a {
+        text-decoration: none;
+        display: block;
+    }
+
+.video-preview {
+    width: 100%;
+    border-radius: 20px;
+    margin: 3px;
+}
+
+.video-box {
+    width: calc(25% - 20px); /* Ширина каждого видео */
+    margin: 10px; /* Отступы между видео */
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+    padding: 5px;
+    transition: background-color ease 0.3s, color ease 0.3s, box-shadow ease 0.2s;
+    color: #2980b9;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #cdcdff;
+    box-shadow: 0px 0px 0px 0px #7ae;
+}
+
+    .video-box:hover {
+        background-color: #eeeeff;
+        box-shadow: 4px 4px 6px 2px #7ae;
+    }
+
+body {
+    transition: background-color ease 1s, color ease 0.5s;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+h2 {
+    color: #2980b9;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+}
+
+div {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+}
+
+button, a {
+    transition: background-color ease 0.3s, color ease 0.3s, box-shadow ease 0.2s;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button {
+    background-color: #2980b9;
+}
+
+    button:hover {
+        background-color: #3498db;
+    }
+
+a {
+    margin-top: 20px;
+    color: #2980b9;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #5555ff;
+    }
+
+    a:active, button:active {
+        background-color: #1a8aaa; /* Темнее при нажатии */
+        color: #ffffff; /* Изменение цвета текста при нажатии, если нужно */
+    }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul {
+    margin-top: 20px;
+}
+
+/*---------------------------------------------------------------------------------------*/
+body.dark-theme {
+    background-color: #1c1c1c;
+    color: #ffffff;
+}
+
+.video-box.dark-theme {
+    border-color: #3c3c5c;
+}
+
+    .video-box.dark-theme:hover {
+        background-color: #2c2cac;
+    }
+
+.video-list.dark-theme {
+    background-color: #2c2c2c;
+}
+
+button.dark-theme {
+    color: #ffffff; /* Цвет текста в темной теме */
+    background-color: #2980b9; /* Выбор цвета для кнопок */
+}
+
+    button.dark-theme:hover {
+        background-color: #3498db;
+    }
+
+h1.dark-theme, h2.dark-theme {
+    color: #ecf0f1; /* Цвет заголовков в темной теме */
+}
+
+div.dark-theme {
+    background-color: #2c2c2c; /* Цвет фона для дивов в темной теме */
+}
+
+/* Адаптивные стили */
+@media (max-width: 1200px) {
+    .video-box {
+        width: calc(33.33% - 20px); /* 3 видео в ряд для больших экранов */
+    }
+}
+
+@media (max-width: 768px) {
+    .video-box {
+        width: calc(50% - 20px); /* 2 видео в ряд для средних экранов */
+    }
+
+    .video-preview {
+        width: 100%; /* Изменяем ширину превью на маленьких экранах */
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-box {
+        width: 100%; /* 1 видео в ряд для маленьких экранов */
+    }
+}
+
+@media (max-width: 768px) {
+    video {
+        width: 100%;
+    }
+}
+
+/* Стили для загрузки файлов */
+.file-upload {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+    border: 2px solid #3498db; /* Обновленный цвет границы */
+    border-radius: 5px;
+    padding: 10px 20px; /* Увеличенные отступы */
+    background-color: #2c2c2c; /* Темный фон */
+    color: #ecf0f1; /* Цвет текста в темной теме */
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавный переход фона и цвета текста */
+}
+
+    .file-upload:hover {
+        background-color: #3498db; /* Цвет фона при наведении */
+        color: #ffffff; /* Цвет текста при наведении */
+    }
+
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}

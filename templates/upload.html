@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{url_for('static', filename='favicon.png')}}" type="image/png">
+    <title>Загрузка видео</title>
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип" class="logo"></a>
+            <button onclick="toggleMenu('registerMenu')">Регистрация</button>
+            <div id="registerMenu" style="display: none;">
+                <form action="/register" method="post">
+                    <input type="text" name="username" placeholder="Логин(имя пользователя)" oninput="preventColon(this)" required>
+                    <input type="password" name="password" placeholder="Пароль" oninput="preventColon(this)" required>
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+
+            <button onclick="toggleMenu('loginMenu')">Вход</button>
+            <div id="loginMenu" style="display: none;">
+                <form action="/login" method="post">
+                    <input type="text" name="username" placeholder="Логин" oninput="preventColon(this)" required>
+                    <input type="password" name="password" placeholder="Пароль" oninput="preventColon(this)" required>
+                    <button type="submit">Войти</button>
+                </form>
+            </div>
+
+            <button onclick="window.location.href='upload'">Загрузить видео</button>
+            <button onclick="toggleTheme()">Сменить тему</button>
+        </nav>
+    </header>
+    <h1>Загрузить видео</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Название видео" oninput="preventColon(this)" required>
+        <div class="file-upload">
+            Загрузить видео
+            <input type="file" name="video_file" accept="video/mp4" required>
+        </div>
+
+        <div class="file-upload">
+            Загрузить превью
+            <input type="file" name="thumbnail_file" accept="image/*" required>
+        </div>
+        <button type="submit">Загрузить</button>
+    </form>
+    <a href="/">Назад</a>
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const elementsToUpdate = document.querySelectorAll('.video-box, a, div, h1, h2, input');
+
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+
+                // Обновление элементов
+                elementsToUpdate.forEach(el => el.classList.add('dark-theme'));
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+
+                // Обновление элементов
+                elementsToUpdate.forEach(el => el.classList.remove('dark-theme'));
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.body.classList.remove('light-theme', 'dark-theme');
+            document.body.classList.add(theme + '-theme');
+            toggleTheme();
+            toggleTheme();
+        }
+
+        function toggleMenu(menuId) {
+            const menu = document.getElementById(menuId);
+            menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+        }
+
+        window.onload = function () {
+            loadTheme();
+        };
+
+        function preventColon(input) {
+            // Заменяем двоеточие на пустую строку
+            input.value = input.value.replace(/:/g, '');
+        }
+
+    </script>
+</body>
+</html>

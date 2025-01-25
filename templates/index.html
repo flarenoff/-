@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{url_for('static', filename='favicon.png')}}" type="image/png">
+    <title>Главная</title>
+    <style>
+        .context-menu {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 5px 0;
+            display: none;
+            z-index: 1000;
+        }
+
+            .context-menu ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .context-menu li {
+                padding: 8px 15px;
+                cursor: pointer;
+                transition: background-color ease 0.3s;
+            }
+
+                .context-menu li:hover {
+                    background-color: #2244f0;
+                }
+    </style>
+</head>
+<body onclick="hideContextMenu()">
+
+    <header>
+        <nav class="menu">
+            <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип" class="logo"></a>
+            <button onclick="toggleMenu('registerMenu')">Регистрация</button>
+            <div id="registerMenu" style="display: none;">
+                <form action="/register" method="post">
+                    <input type="text" name="username" placeholder="Логин(имя пользователя)" oninput="preventColon(this)" required>
+                    <input type="password" name="password" placeholder="Пароль" oninput="preventColon(this)" required>
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+
+            <button onclick="toggleMenu('loginMenu')">Вход</button>
+            <div id="loginMenu" style="display: none;">
+                <form action="/login" method="post">
+                    <input type="text" name="username" placeholder="Логин" oninput="preventColon(this)" required>
+                    <input type="password" name="password" placeholder="Пароль" oninput="preventColon(this)" required>
+                    <button type="submit">Войти</button>
+                </form>
+            </div>
+
+            <button onclick="window.location.href='upload'">Загрузить видео</button>
+            <button onclick="toggleTheme()">Сменить тему</button>
+        </nav>
+    </header>
+
+    <h2>Список видео</h2>
+    <div class="video-list">
+        {% for video in videos %}
+        <div class="video-box" data-video-id="{{ video.id }}">
+            <a href="{{ url_for('video', video_id=video.id) }}">
+                {{ video.title }}
+                <img src="{{ url_for('upload_video_file', filename=video.id + '.jpg') }}" alt="{{ video.title }}" style="width: 200px; height: auto;">
+                (Коэффициент прикола: {{ video.likes - video.dislikes }})
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div id="contextMenu" class="context-menu">
+        <ul>
+            <li onclick="downloadVideo()">Скачать видео</li>
+            <li onclick="downloadCover()">Скачать обложку</li>
+            <li onclick="viewAnalytics()">Посмотреть аналитику</li>
+            <li onclick="copyLink()">Скопировать ссылку</li>
+            <li onclick="shareVideo()">Поделиться</li>
+        </ul>
+    </div>
+
+    <script>
+        let currentVideoId = null;
+
+        function toggleTheme() {
+            const body = document.body;
+            const elementsToUpdate = document.querySelectorAll('.video-box, a, div, h1, h2, input');
+
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+
+                // Обновление элементов
+                elementsToUpdate.forEach(el => el.classList.add('dark-theme'));
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+
+                // Обновление элементов
+                elementsToUpdate.forEach(el => el.classList.remove('dark-theme'));
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.body.classList.remove('light-theme', 'dark-theme');
+            document.body.classList.add(theme + '-theme');
+            toggleTheme();
+            toggleTheme();
+        }
+
+        function toggleMenu(menuId) {
+            const menu = document.getElementById(menuId);
+            menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+        }
+
+        function showContextMenu(e) {
+            e.preventDefault();
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = e.pageX + 'px';
+            contextMenu.style.top = e.pageY + 'px';
+
+            currentVideoId = e.target.closest('.video-box').dataset.videoId;
+        }
+
+        function hideContextMenu() {
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.display = 'none';
+        }
+
+        function downloadVideo() {
+            alert(`Скачать видео с ID ${currentVideoId} нельзя, ведь платной подписки у нас  пока что нет`);
+            hideContextMenu();
+        }
+
+        function downloadCover() {
+            alert(`Скачать обложку с ID ${currentVideoId} нельзя, ведь платной подписки у нас  пока что нет`);
+            hideContextMenu();
+        }
+
+        function viewAnalytics() {
+            alert(`Посмотреть аналитику видео с ID: ${currentVideoId}`);
+            hideContextMenu();
+        }
+
+        function copyLink() {
+            const videoId = currentVideoId; // Предполагается, что currentVideoId где-то объявлен и доступен
+            const link = `http://192.168.1.141:5000/video/${videoId}`;
+
+            navigator.clipboard.writeText(link)
+                .then(() => {
+                    console.log("Ссылка скопирована в буфер обмена:", link);
+                })
+                .catch(err => {
+                    console.error('Не удалось скопировать ссылку: ', err);
+                });
+            hideContextMenu();
+        }
+
+        function shareVideo() {
+            const videoId = currentVideoId;
+            const link = `http://192.168.1.141:5000/video/${videoId}`;
+            const title = "Поделиться этим видео!"; // Можно сделать динамическим
+
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: link
+                })
+                    .then(() => console.log('Видео успешно расшарено'))
+                    .catch((error) => console.error('Ошибка при расшаривании видео:', error));
+            } else {
+                console.log('Web Share API не поддерживается в вашем браузере. Копируйте ссылку вручную:', link);
+                // Можно добавить альтернативную логику, например, копирование ссылки в буфер обмена
+                // (как мы делали ранее) или показ сообщения с ссылкой
+            }
+            hideContextMenu();
+        }
+
+        window.onload = function () {
+            loadTheme();
+
+            const videoBoxes = document.querySelectorAll('.video-box');
+            videoBoxes.forEach(box => {
+                box.addEventListener('contextmenu', showContextMenu);
+            });
+        };
+        function preventColon(input) {
+            // Заменяем двоеточие на пустую строку
+            input.value = input.value.replace(/:/g, '');
+        }
+    </script>
+
+</body>
+</html>
